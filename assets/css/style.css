@@ -72,4 +72,5 @@ textarea{
 
 .timebrdr {
   border-top: dashed black 2px;
+  padding-top: 10px;
 }
