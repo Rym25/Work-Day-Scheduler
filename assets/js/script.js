@@ -26,13 +26,17 @@ var init = function() {
         var colTaskSpan = $("<span>").text("Tasks Go Here");
         colTaskEl.append(colTaskSpan);
         // creates the button div
-        var colSaveEl = $("<div>").addClass("col-2 border border-dark rounded-right").text("Button Goes Here");
+        // var colSaveEl = $("<div>").addClass("col-2 border border-dark rounded-right");
+        var colSaveButton = $("<button>").addClass("col-2 border border-dark btn btn-primary btn-block").append("<span class='oi oi-file'></span><p>Save<p>")
+       
         // appends the created columns to the row
-        rowEl.append(colTimeEl, colTaskEl, colSaveEl);
+        rowEl.append(colTimeEl, colTaskEl, colSaveButton);
         // appends the created row to the calendarEl in the html
         calendarEl.append(rowEl);
     }
 }
+
+init();
 
 $(".container").on("click",".task span", function() {
     // get the text that was there
@@ -52,4 +56,6 @@ $(".container").on("blur",".task textarea", function () {
     $(this).replaceWith(thisTask);
 })
 
-init();
+$(".container").on("click","button", function() {
+    console.log("Saved");
+})
