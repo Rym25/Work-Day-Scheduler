@@ -22,7 +22,9 @@ var init = function() {
             var colTimeEl = $("<div>").addClass("col-2 text-center border-right border-dark timebrdr").text(x + "PM");
         }
         // creates the task div
-        var colTaskEl = $("<div>").addClass("col-8 task").text("Tasks Go Here").attr("id", x + "task");
+        var colTaskEl = $("<div>").addClass("col-8 task").attr("id", x + "task");
+        var colTaskSpan = $("<span>").text("Tasks Go Here");
+        colTaskEl.append(colTaskSpan);
         // creates the button div
         var colSaveEl = $("<div>").addClass("col-2 border border-dark rounded-right").text("Button Goes Here");
         // appends the created columns to the row
@@ -32,9 +34,22 @@ var init = function() {
     }
 }
 
-$(".container").on("click",".task", function() {
-    var thisTask = $(this);
-    console.log(thisTask);
+$(".container").on("click",".task span", function() {
+    // get the text that was there
+    var thisTask = $(this).text().trim();
+    // creates an editable textarea
+    var textInput = $("<textarea>").addClass("form-control").val(thisTask);
+    $(this).replaceWith(textInput);
+    // sets the page to focus on this element
+    textInput.trigger("focus");
 });
+
+$(".container").on("blur",".task textarea", function () {
+    var textInput = $(this).val().trim();
+    console.log(textInput);
+    var thisTask = $("<span>").text(textInput);
+    console.log(thisTask);
+    $(this).replaceWith(thisTask);
+})
 
 init();
