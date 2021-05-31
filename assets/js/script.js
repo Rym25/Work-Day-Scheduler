@@ -17,13 +17,13 @@ var init = function() {
         // creates the time column
         if(i <= 2) {
             var x = 9 + i;
-            var colTimeEl = $("<div>").addClass("col-2 text-right border-right border-dark timebrdr").text(x + "AM");
+            var colTimeEl = $("<div>").addClass("col-2 text-right border-right border-dark timebrdr").text(x + "AM").attr("id","time" + i);
         } else if (i === 3) {
             var x = 12
-            var colTimeEl = $("<div>").addClass("col-2 text-right border-right border-dark timebrdr").text(x + "PM");
+            var colTimeEl = $("<div>").addClass("col-2 text-right border-right border-dark timebrdr").text(x + "PM").attr("id","time" + i);
         } else {
             var x = i - 3;
-            var colTimeEl = $("<div>").addClass("col-2 text-right border-right border-dark timebrdr").text(x + "PM");
+            var colTimeEl = $("<div>").addClass("col-2 text-right border-right border-dark timebrdr").text(x + "PM").attr("id","time" + i);
         }
         // creates the task div and load in saved tasks
         if (savedTasks) {
@@ -50,7 +50,35 @@ var init = function() {
     }
 }
 
+// Create a function to audit the current time and color the calendar hours accordingly
+var audit = function() {
+    for (var i = 0; i < 9; i++) {
+        if(i <= 2) {
+            var x = 9 + i;
+            var setTime = moment().hour(x).minute(0);
+            console.log(setTime.toNow(true));
+        } else if (i === 3) {
+            var x = 12
+            var x = 9 + i;
+            var setTime = moment().hour(x).minute(0);
+            console.log(setTime.toNow(true));
+        } else {
+            var x = i + 9;
+            var x = 9 + i;
+            var setTime = moment().hour(x).minute(0);
+            console.log(setTime.toNow(true));
+        }
+    }
+}
+
 init();
+
+audit();
+
+var setTime = moment().hour(9).minute(0);
+            console.log(moment().isBefore(setTime));
+            console.log(moment().isAfter(setTime));
+            console.log(moment().isSame(setTime));
 
 $(".container").on("click",".task span", function() {
     // get the text that was there
