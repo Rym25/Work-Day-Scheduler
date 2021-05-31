@@ -4,6 +4,12 @@ var calendarTasks = {};
 var init = function() {
     // Create a variable for the current date
     var todayDate = moment().format("dddd, MMMM Do");
+    // checks to see if this is the same date, if not remove yesterdays tasks
+    var checkDate = localStorage.getItem("checkDate");
+    if (todayDate !== checkDate){
+        localStorage.removeItem("calendarTasks");
+        localStorage.setItem("checkDate", todayDate);
+    }
     // Set the text for the currentDay div to todays date
     $("#currentDay").text(todayDate);
     // loads locally stored tasks
@@ -23,18 +29,18 @@ var init = function() {
             var x = i - 3;
             var colTimeEl = $("<div>").addClass("col-2 text-right border-right border-dark timebrdr").text(x + "PM").attr("id","time" + i);
         }
-        // creates the task div and load in saved tasks
+        // creates the task column and load in saved tasks
         if (savedTasks) {
             if (savedTasks[i]){
             var colTaskEl = $("<div>").addClass("col-8 text-center task").attr("id", "task" + i);
             var colTaskSpan = $("<span>").text(savedTasks[i]);
             } else {
                 var colTaskEl = $("<div>").addClass("col-8 text-center task").attr("id", "task" + i);
-                var colTaskSpan = $("<span>").text("Enter Task Here");
+                var colTaskSpan = $("<span>").text("Click Here To Enter Task");
             }
         } else {
         var colTaskEl = $("<div>").addClass("col-8 text-center task").attr("id", "task" + i);
-        var colTaskSpan = $("<span>").text("Enter Task Here");
+        var colTaskSpan = $("<span>").text("Click Here To Enter Task");
         }
         colTaskEl.append(colTaskSpan);
         // creates the button div
@@ -46,6 +52,8 @@ var init = function() {
         // appends the created row to the calendarEl in the html
         calendarEl.append(rowEl);
     }
+    // calls the audit function on page load
+    audit();
 }
 
 // Create a function to audit the current time and color the calendar hours accordingly
@@ -69,13 +77,13 @@ var audit = function() {
     }
     console.log("audited");
 }
-
+// initializes the page
 init();
 
-audit();
+// audits page every 15 minutes
+setInterval(audit,(1000*60*15));
 
-setInterval(audit,(10000));
-
+// looks for clicks on the span elements in the task divs
 $(".container").on("click",".task span", function() {
     // get the text that was there
     var thisTask = $(this).text().trim();
@@ -86,20 +94,26 @@ $(".container").on("click",".task span", function() {
     textInput.trigger("focus");
 });
 
+// looks for when a textarea is clicked off of
 $(".container").on("blur",".task textarea", function () {
+    // gets the entered text from the text area
     var textInput = $(this).val().trim();
-    console.log(textInput);
+    // creates a new span element and puts the entered text into it
     var thisTask = $("<span>").text(textInput);
-    console.log(thisTask);
+    // replaces the text area with the new span
     $(this).replaceWith(thisTask);
 })
 
+// looks for when a button element is clicked
 $(".container").on("click","button", function() {
+    // gets the id of the button
     var buttonId = $(this).attr("id");
+    // gets the index number from the button id to use to get the corresponding task index number
     var hour = buttonId[buttonId.length - 1];
+    // gets the text from the task section
     var task = $("#task" + hour).text().trim();
-    
+    // puts task into the calendarTasks array
     calendarTasks[hour] = task;
-    console.log(calendarTasks);
+    // saves the calendarTasks array to local memory
     localStorage.setItem("calendarTasks",JSON.stringify(calendarTasks));
 })
