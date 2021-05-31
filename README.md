@@ -31,4 +31,5 @@ https://rym25.github.io/Work-Day-Scheduler/
 
 ## Site Screen Capture
 
-![image](https://user-images.githubusercontent.com/82060073/120137477-a1913980-c191-11eb-8fcf-0cab67726554.png)
+![image](https://user-images.githubusercontent.com/82060073/120137565-d9987c80-c191-11eb-885c-5db66ec06166.png)
+
