@@ -4,12 +4,10 @@ var calendarTasks = {};
 var init = function() {
     // Create a variable for the current date
     var todayDate = moment().format("dddd, MMMM Do");
-    console.log(todayDate);
     // Set the text for the currentDay div to todays date
     $("#currentDay").text(todayDate);
     // loads locally stored tasks
     var savedTasks = JSON.parse(localStorage.getItem("calendarTasks"));
-    console.log("savedTasks",savedTasks);
     // Creates Calendar Time Blocks
     for(var i = 0; i < 9; i++){
         // creates a row element
@@ -53,32 +51,30 @@ var init = function() {
 // Create a function to audit the current time and color the calendar hours accordingly
 var audit = function() {
     for (var i = 0; i < 9; i++) {
-        if(i <= 2) {
-            var x = 9 + i;
-            var setTime = moment().hour(x).minute(0);
-            console.log(setTime.toNow(true));
-        } else if (i === 3) {
-            var x = 12
-            var x = 9 + i;
-            var setTime = moment().hour(x).minute(0);
-            console.log(setTime.toNow(true));
+        // remove any previous audit classes from tasks by thier ID
+        $("#task" + i).removeClass("list-group-item-success list-group-item-danger list-group-item-secondary");
+        // creates a comparison time for the hour we are comparing to
+        var x = 9 + i;
+        var setTime = moment().hour(x).minute(0);
+        // compare setTime to the current time
+        var toNow = setTime.toNow(true);
+        // check if the time till now is an hour or more (really 45 minutes) then checks if it is before or after the current time.
+        if(toNow.indexOf("hour") !== -1 && moment().isBefore(setTime)){
+            $("#task" + i).addClass("list-group-item-success");
+        } else if (toNow.indexOf("hour") !== -1 && moment().isAfter(setTime)) {
+            $("#task" + i).addClass("list-group-item-secondary");
         } else {
-            var x = i + 9;
-            var x = 9 + i;
-            var setTime = moment().hour(x).minute(0);
-            console.log(setTime.toNow(true));
+            $("#task" + i).addClass("list-group-item-danger");
         }
     }
+    console.log("audited");
 }
 
 init();
 
 audit();
 
-var setTime = moment().hour(9).minute(0);
-            console.log(moment().isBefore(setTime));
-            console.log(moment().isAfter(setTime));
-            console.log(moment().isSame(setTime));
+setInterval(audit,(10000));
 
 $(".container").on("click",".task span", function() {
     // get the text that was there
